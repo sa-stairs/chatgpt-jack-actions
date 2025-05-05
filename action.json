@@ -1,0 +1,22 @@
+{
+    "schema_version": "v1",
+    "name_for_human": "Asana Internal Tools",
+    "name_for_model": "asanaInternal",
+    "description_for_human": "View your Asana profile and tasks using internal workspace.",
+    "description_for_model": "Fetch Asana user info and task data using a fixed workspace.",
+    "auth": {
+      "type": "oauth",
+      "authorization_url": "https://app.asana.com/-/oauth_authorize",
+      "token_url": "https://app.asana.com/-/oauth_token",
+      "client_url": "https://app.asana.com/-/oauth_authorize",
+      "scope": "",
+      "authorization_content_type": "application/x-www-form-urlencoded",
+      "verification_tokens": {}
+    },
+    "api": {
+      "type": "openapi",
+      "url": "https://raw.githubusercontent.com/sa-stairs/chatgpt-jack-actions/main/asana-openapi.yaml",
+      "has_user_authentication": true
+    }
+  }
+  

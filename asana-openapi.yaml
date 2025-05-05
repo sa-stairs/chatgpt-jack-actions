@@ -1,0 +1,124 @@
+openapi: 3.1.0
+info:
+  title: Asana Internal OAuth API
+  description: Internal app integration to access the authenticated user's Asana ID and task data.
+  version: 1.0.0
+servers:
+  - url: https://app.asana.com/api/1.0
+
+paths:
+  /users/me:
+    get:
+      operationId: getAuthenticatedUser
+      summary: Get the authenticated user's Asana ID
+      responses:
+        "200":
+          description: Authenticated user's profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+      security:
+        - OAuth2: []
+
+  /users/{user_gid}/tasks:
+    get:
+      operationId: getUserTasks
+      summary: Get tasks assigned to a specific user
+      parameters:
+        - name: user_gid
+          in: path
+          required: true
+          description: The GID of the user to retrieve tasks for
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of tasks assigned to the user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskListResponse"
+      security:
+        - OAuth2: []
+
+  /tasks/{task_gid}:
+    get:
+      operationId: getTaskDetails
+      summary: Get details of a specific task
+      parameters:
+        - name: task_gid
+          in: path
+          required: true
+          description: The GID of the task
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Task details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+      security:
+        - OAuth2: []
+
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://app.asana.com/-/oauth_authorize
+          tokenUrl: https://app.asana.com/-/oauth_token
+          scopes: {}
+
+  schemas:
+    User:
+      type: object
+      properties:
+        gid:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        resource_type:
+          type: string
+
+    UserResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/User"
+
+    Task:
+      type: object
+      properties:
+        gid:
+          type: string
+        name:
+          type: string
+        completed:
+          type: boolean
+        due_on:
+          type: string
+          format: date
+        assignee_status:
+          type: string
+        resource_type:
+          type: string
+
+    TaskResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Task"
+
+    TaskListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Task"
